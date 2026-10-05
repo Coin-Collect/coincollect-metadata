@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://metadata.coincollect.org/schema/nft-pools.schema.json",
+  "title": "CoinCollect NFT pool presentation metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "updatedAt", "pools"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "updatedAt": { "type": "string", "format": "date-time", "maxLength": 80 },
+    "pools": {
+      "type": "array",
+      "maxItems": 2000,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^137:0x[a-f0-9]{40}$" },
+          "name": { "type": "string", "maxLength": 200 },
+          "banner": { "$ref": "#/$defs/url" },
+          "avatar": { "$ref": "#/$defs/url" },
+          "projectUrl": { "$ref": "#/$defs/url" },
+          "getNftUrl": { "$ref": "#/$defs/url" },
+          "description": { "type": "string", "maxLength": 1000 },
+          "category": { "enum": ["PARTNER", "COMMUNITY"] }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "maxLength": 2048
+    }
+  },
+  "x-uniquePoolId": "The frontend rejects duplicate canonical pool IDs even though JSON Schema uniqueItems only compares complete objects."
+}
